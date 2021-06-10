@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // 		saveUninitialized: false,
 // 	})
 // );
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 1337;
 
 // client.messages
 // 	.create({ body: "Hi there", from: "+15017122661", to: "+15558675310" })
@@ -39,7 +39,7 @@ app.post("/reply", async (req, res) => {
 });
 
 // Receive
-app.get("/sms", async (req, res) => {
+app.post("/sms", async (req, res) => {
 	const body = req.body.Body;
 	// SAVE text and number
 	// CREATE new convo
