@@ -11,9 +11,9 @@ Text.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    recipientsNum: DataTypes.STRING,
-    sendersNum: DataTypes.STRING,
-    text: DataTypes.STRING,
+    recipients_num: { type: DataTypes.STRING },
+    senders_num: { type: DataTypes.STRING },
+    text: { type: DataTypes.STRING },
     date_created: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -32,7 +32,7 @@ Text.init(
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: 'project',
+    modelName: 'text',
   }
 );
 

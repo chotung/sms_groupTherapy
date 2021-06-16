@@ -3,37 +3,26 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const { Text } = require('../../models');
+const router = require('express').Router();
 
-module.exports = {
-  async recieveText(req, res) {
-    console.log(req.body.Body);
-    const { From, SmsMessageSid, Body, SmsSid, To } = req.body;
-    try {
-      const newText = await Text.create({});
-      // save the text
-      // const txt = await Text.create({
-      // 	From,
-      // 	To,
-      // 	SmsMessageSid,
-      // 	Body,
-      // 	SmsSid,
-      // });
-      // match sender number and user number
-      // if first time sending
-      // create a new conversation
-      // have to write content type of twilio as xml
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      res.send(txt);
-      // else there's already a conversation between sender and twilio/user
-      // find and update that convo by adding new text
-      // res.writeHead(200, { "Content-Type": "text/xml" });
-    } catch (e) {
-      console.log(e);
-      res.send(e);
-    }
-  },
+router.post('/recieve', async (req, res) => {
+  const { From, SmsMessageSid, Body, SmsSid, To } = req.body;
+  try {
+    const newText = await Text.create({
+      recipients_num: To,
+      senders_num: From,
+      text: Body,
+    });
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
 
-  async sendText(req, res) {
+// WithAuth
+router.post('/send', async (req, res) => {
+  try {
     const mes = req.body.message;
     // FIGURE OUT WHO I AM REPLYING TO
     const message = await client.messages.create({
@@ -45,13 +34,21 @@ module.exports = {
     // ADD MESSAGE TO CONVERSATION
     // ALWAYS UPDATE THE CONVERSATION
     res.json(message);
-  },
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
 
-  async getRelatedText(req, res) {
-    res.send('get text messages related to a specific number');
-  },
+router.get('/messages', async (req, res) => {
+  try {
+    // filter out texts based on sender_num
+    const allMessages = await Text.findAll({});
+    res.status(200).json(allMessages);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
 
-  async getListofSenders(req, res) {
-    res.send('gets all the phone numbers to seperate the conversations');
-  },
-};
+module.exports = router;
