@@ -1,30 +1,26 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import Chatroom from "../components/Chatroom";
+import Chat from "../components/Chat";
+import ListGroup from "react-bootstrap/ListGroup";
 
 export default function Conversation(props) {
 	let history = useHistory();
 
 	const handleClick = () => {
-		console.log("clicking");
-		history.push("/convo/id");
+		history.push(`/convo/${props.id}`);
 	};
 
 	const renderMessages = () => {
-		return props.msgs.map((msge) => {
-			return (
-				<p key={msge.num}>
-					{msge.num}
-					&nbsp;
-					{msge.name}: &nbsp;
-					{msge.msg}
-				</p>
-			);
-		});
+		return (
+			<ListGroup key={props.msgs.id}>
+				<ListGroup.Item>
+					{/* Make sure you the conversation header isn't yourself */}
+					<h2>{props.msgs.name ? props.msgs.name : props.msgs.number}</h2>
+					<p>{props.msgs.msg}</p>
+				</ListGroup.Item>
+			</ListGroup>
+		);
 	};
-	return (
-		<div onClick={handleClick}>
-			<h2>The phone #</h2>
-			{renderMessages()}
-		</div>
-	);
+	return <div onClick={handleClick}>{renderMessages()}</div>;
 }
