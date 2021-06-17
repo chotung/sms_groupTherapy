@@ -9,8 +9,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Chatroom from './components/Chatroom';
 import useChat from './components/useChatRoom';
+import RegisterForm from './authComponents/RegisterForm';
+import LoginForm from './authComponents/LoginForm';
+import LogoutButton from './authComponents/LogoutButton';
 // save user in localstorage
 function App() {
+  const [user, setUser] = useState(null);
+  const [userAuth, setUserAuth] = useState(true);
   // const { messages, sendMessage } = useChat();
   // const [newMessage, setNewMessage] = useState('');
   // const messageRef = useRef();
@@ -36,9 +41,21 @@ function App() {
   //   }
   // };
   // useEffect(() => messageRef.current.scrollIntoView({ behavior: 'smooth' }));
-
+  console.log(user);
   return (
-    <div>homepage</div>
+    <div>
+      {user ? (
+        <LogoutButton setUser={setUser} />
+      ) : (
+        <div>
+          {userAuth ? (
+            <RegisterForm setUser={setUser} setRegister={setUserAuth} />
+          ) : (
+            <LoginForm user={user} setUser={setUser} setLogin={setUserAuth} />
+          )}
+        </div>
+      )}
+    </div>
 
     // // websockets
     // <div>
