@@ -10,7 +10,7 @@ class User extends Model {
 
 User.init(
   {
-    twilioNumber: {
+    twilio_number: {
       type: DataTypes.STRING,
       allowNull: false,
     },

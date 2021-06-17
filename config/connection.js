@@ -14,7 +14,8 @@ if (process.env.JAWSDB_URL) {
       host: 'localhost',
       dialect: 'postgres',
       port: 5432,
-    }
+    },
+    { query: { raw: true } }
   );
 }
 
